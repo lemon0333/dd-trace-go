@@ -58,7 +58,8 @@ include:
   - local: ".gitlab/configuration-central-validation.yml"
   - project: 'DataDog/apm-reliability/apm-sdks-benchmarks'
     file: '.gitlab/ci-go-go-prof-app-parallel.yml'
-    ref: 'main'
+    # TODO: remove once https://github.com/DataDog/apm-sdks-benchmarks/pull/251 is merged
+    ref: 'augusto/upload-to-s3-bp-external-url'
 
 # Pin the benchmarking-platform image for the go-go-prof-app-parallel jobs
 # included from DataDog/apm-reliability/apm-sdks-benchmarks above.
