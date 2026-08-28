@@ -51,8 +51,14 @@ include:
     ref: 'main'
   # LLM Validation gate: reusable job shipped by the platform repo — only the local .llm-validation/ suite
   # stays in this repo. The job auto-skips when no monitored file changed; a FAIL blocks the merge.
-  - project: 'DataDog/llm-validation-platform'
-    ref: anna.yafi/instruction-presence-benchmark
+  #
+  # TEMPORARY: DataDog/llm-validation-platform was archived (org migration to ddoghq); testing whether the
+  # ddbuild GitLab mirror resolves the ddoghq copy the same way. Points at anna.yafi/make-generic, which also
+  # carries the new "llm validation (candidate-absent)" job — both LLMVAL_PLATFORM_PROJECT overrides below
+  # need to match this for that job to resolve too, since it extends the template's own job definition
+  # before this file's job re-opening is merged in.
+  - project: 'ddoghq/llm-validation-platform'
+    ref: anna.yafi/make-generic
     file: '/ci/llm-validation.gitlab-ci.yml'
 
 variables:
@@ -62,6 +68,16 @@ variables:
 # included from DataDog/apm-reliability/apm-sdks-benchmarks above.
 linux-go-go-prof-app-parallel:
   image: registry.ddbuild.io/images/benchmarking-platform-tools-ubuntu:6845f3c7
+
+"llm validation":
+  variables:
+    LLMVAL_PLATFORM_PROJECT: "ddoghq/llm-validation-platform"
+    LLMVAL_PLATFORM_REF: "anna.yafi/make-generic"
+
+"llm validation (candidate-absent)":
+  variables:
+    LLMVAL_PLATFORM_PROJECT: "ddoghq/llm-validation-platform"
+    LLMVAL_PLATFORM_REF: "anna.yafi/make-generic"
 
 go-go-prof-app-parallel-check-slo-breaches:
   image: registry.ddbuild.io/images/benchmarking-platform-tools-ubuntu:6845f3c7
